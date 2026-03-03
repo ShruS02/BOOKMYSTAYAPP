@@ -16,10 +16,16 @@ class RoomInventory {
         return inventory.getOrDefault(roomType, 0);
     }
 
-    public void updateAvailability(String roomType, int newCount) {
-        if (inventory.containsKey(roomType) && newCount >= 0) {
-            inventory.put(roomType, newCount);
-        }
+    public boolean updateAvailability(String roomType, int change) {
+        if (!inventory.containsKey(roomType)) return false;
+
+        int current = inventory.get(roomType);
+        int updated = current + change;
+
+        if (updated < 0) return false;
+
+        inventory.put(roomType, updated);
+        return true;
     }
 
     public void displayInventory() {
@@ -34,12 +40,13 @@ public class usecasesforbookmystay {
 
     public static void main(String[] args) {
 
+        System.out.println("Hotel Booking System v3.1\n");
+
         RoomInventory inventory = new RoomInventory();
 
         inventory.displayInventory();
 
-        int currentSingle = inventory.getAvailability("Single Room");
-        inventory.updateAvailability("Single Room", currentSingle - 1);
+        inventory.updateAvailability("Single Room", -1);
 
         inventory.displayInventory();
     }
