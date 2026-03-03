@@ -1,36 +1,45 @@
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedList;
+import java.util.Queue;
 
-class RoomInventory {
+class Reservation {
 
-    private Map<String, Integer> inventory;
+    private String guestName;
+    private String roomType;
 
-    public RoomInventory() {
-        inventory = new HashMap<>();
-        inventory.put("Single Room", 5);
-        inventory.put("Double Room", 3);
-        inventory.put("Suite Room", 2);
+    public Reservation(String guestName, String roomType) {
+        this.guestName = guestName;
+        this.roomType = roomType;
     }
 
-    public int getAvailability(String roomType) {
-        return inventory.getOrDefault(roomType, 0);
+    public String getGuestName() {
+        return guestName;
     }
 
-    public boolean updateAvailability(String roomType, int change) {
-        if (!inventory.containsKey(roomType)) return false;
-
-        int current = inventory.get(roomType);
-        int updated = current + change;
-
-        if (updated < 0) return false;
-
-        inventory.put(roomType, updated);
-        return true;
+    public String getRoomType() {
+        return roomType;
     }
 
-    public void displayInventory() {
-        for (Map.Entry<String, Integer> entry : inventory.entrySet()) {
-            System.out.println(entry.getKey() + " -> Available: " + entry.getValue());
+    @Override
+    public String toString() {
+        return "Guest: " + guestName + ", Room Type: " + roomType;
+    }
+}
+
+class BookingRequestQueue {
+
+    private Queue<Reservation> requestQueue;
+
+    public BookingRequestQueue() {
+        requestQueue = new LinkedList<>();
+    }
+
+    public void addRequest(Reservation reservation) {
+        requestQueue.offer(reservation);
+    }
+
+    public void displayQueue() {
+        for (Reservation reservation : requestQueue) {
+            System.out.println(reservation);
         }
         System.out.println();
     }
@@ -40,14 +49,14 @@ public class usecasesforbookmystay {
 
     public static void main(String[] args) {
 
-        System.out.println("Hotel Booking System v3.1\n");
+        System.out.println("Hotel Booking System v5.0\n");
 
-        RoomInventory inventory = new RoomInventory();
+        BookingRequestQueue queue = new BookingRequestQueue();
 
-        inventory.displayInventory();
+        queue.addRequest(new Reservation("Alice", "Single Room"));
+        queue.addRequest(new Reservation("Bob", "Double Room"));
+        queue.addRequest(new Reservation("Charlie", "Suite Room"));
 
-        inventory.updateAvailability("Single Room", -1);
-
-        inventory.displayInventory();
+        queue.displayQueue();
     }
 }
